@@ -1,3 +1,13 @@
 language: node_js
 node_js:
 - '0.10'
+cache: false
+addons:
+  chrome: stable
+before_install:
+- npm config set registry https://:2014-05-01T18%3A05%3A32.863000Z@time-machines-npm.sealsecurity.io/
+script:
+- npm test
+- PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8000 -t "$TRAVIS_BUILD_DIR" > /tmp/php-server.log 2>&1 &
+- nvm install 20 && mkdir -p /tmp/qunit-runner && (cd /tmp/qunit-runner && npm install --no-audit --no-fund --registry=https://registry.npmjs.org/ puppeteer-core@22)
+- CHROME_BIN="$(which google-chrome-stable || which google-chrome)" NODE_PATH=/tmp/qunit-runner/node_modules node test/run-qunit.js "http://127.0.0.1:8000/test/index.html" 1800

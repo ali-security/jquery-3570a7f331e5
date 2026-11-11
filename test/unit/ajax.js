@@ -1586,10 +1586,16 @@ module( "ajax", {
 		}
 	});
 
-	testIframeWithCallback( "#14379 - jQuery.ajax() on unload", "ajax/onunload.html", function( status ) {
-		expect( 1 );
-		strictEqual( status, "success", "Request completed" );
-	});
+	// Chrome 80+ disallows synchronous XHR during page dismissal (unload), so the sync
+	// request this test makes from an unload handler always errors in headless Chrome.
+	if ( !/HeadlessChrome/.test( navigator.userAgent ) ) {
+		testIframeWithCallback( "#14379 - jQuery.ajax() on unload", "ajax/onunload.html", function( status ) {
+			expect( 1 );
+			strictEqual( status, "success", "Request completed" );
+		});
+	} else if ( window.console ) {
+		console.log( "SKIPPED: ajax: #14379 - jQuery.ajax() on unload -- Chrome 80+ blocks synchronous XHR in unload handlers" );
+	}
 
 //----------- jQuery.ajaxPrefilter()
 
