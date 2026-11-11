@@ -23,7 +23,7 @@ test("jQuery()", function() {
 		obj = jQuery("div"),
 		code = jQuery("<code/>"),
 		img = jQuery("<img/>"),
-		div = jQuery("<div/><hr/><code/><b/>"),
+		div = jQuery("<div></div><hr/><code></code><b/>"),
 		exec = false,
 		lng = "",
 		expected = 22,
@@ -1338,7 +1338,7 @@ test("jQuery.parseHTML", function() {
 	equal( jQuery.parseHTML("text")[0].nodeType, 3, "Parsing text returns a text node" );
 	equal( jQuery.parseHTML( "\t<div></div>" )[0].nodeValue, "\t", "Preserve leading whitespace" );
 
-	equal( jQuery.parseHTML(" <div/> ")[0].nodeType, 3, "Leading spaces are treated as text nodes (#11290)" );
+	equal( jQuery.parseHTML(" <div></div> ")[0].nodeType, 3,"Leading spaces are treated as text nodes (#11290)" );
 
 	html = jQuery.parseHTML( "<div>test div</div>" );
 	equal( html[ 0 ].parentNode.nodeType, 11, "parentNode should be documentFragment" );
